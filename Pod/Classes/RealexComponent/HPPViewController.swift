@@ -213,13 +213,19 @@ class HPPViewController: UIViewController, WKNavigationDelegate,  WKUIDelegate, 
 
         if message.name == "timeoutHandler" {
             // JavaScript 500ms timeout callback
-            self.delegate?.HPPViewControllerFailedWithError!(nil)
+            let error = NSError(domain: "",
+                                code: 500,
+                                userInfo: [NSLocalizedDescriptionKey : "Javascript callback error for message: \(message.name)"])
+            self.delegate?.HPPViewControllerFailedWithError!(error)
         } else if let messageString = message.body as? String {
             self.delegate?.HPPViewControllerCompletedWithResult!(messageString)
         }
         else {
             print("Something went wrong")
-            self.delegate?.HPPViewControllerFailedWithError!(nil)
+            let error = NSError(domain: "",
+                                code: 500,
+                                userInfo: [NSLocalizedDescriptionKey : "Javascript callback error for message: \(message.name)"])
+            self.delegate?.HPPViewControllerFailedWithError!(error)
         }
 
         delegate?.HPPViewControllerWillDismiss?()
